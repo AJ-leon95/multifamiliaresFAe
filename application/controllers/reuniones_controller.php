@@ -1,12 +1,16 @@
 <?php
-class reuniones_controller extends CI_Controller
+class Reuniones_controller extends CI_Controller
 {
 
     public function __construct()
     {
-        parent::__construct();
-        $this->load->model("empresa_model");
-        $this->load->model("reunion_model");
+        parent::__construct();      
+        $this->load->library('session');
+        if (!$this->session->userdata('conectado')) {
+            redirect('/Vista_general/login'); 
+        }
+        $this->load->model("Empresa_model");
+        $this->load->model("Reunion_model");
     }
     public function index()
     {
@@ -16,7 +20,7 @@ class reuniones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["reuniones"] = $this->reunion_model->obtenerDatos();
+            $data["reuniones"] = $this->Reunion_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("reunion/index", $data);
             $this->load->view("administracion/footer");
@@ -30,7 +34,7 @@ class reuniones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["empresa"] = $this->empresa_model->obtenerDatos();
+            $data["empresa"] = $this->Empresa_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("reunion/nuevo", $data);
             $this->load->view("administracion/footer");
@@ -45,7 +49,7 @@ class reuniones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "GERENTE"||
             $this->session->userdata("conectado")->perfil == "SOCIO"
         ) {
-            $data["reunion"] = $this->reunion_model->obtenerDatos();
+            $data["reunion"] = $this->Reunion_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("reunion/reuniones", $data);
             $this->load->view("administracion/footer");
@@ -59,8 +63,8 @@ class reuniones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["empresa"] = $this->empresa_model->obtenerDatos();
-            $data["reunion"] = $this->reunion_model->obtenerRegistro($id_reu);
+            $data["empresa"] = $this->Empresa_model->obtenerDatos();
+            $data["reunion"] = $this->Reunion_model->obtenerRegistro($id_reu);
             $this->load->view("administracion/header");
             $this->load->view("reunion/editar", $data);
             $this->load->view("administracion/footer");
@@ -84,24 +88,24 @@ class reuniones_controller extends CI_Controller
                 "asunto_reu" => $this->input->post("asunto_reu"),
             );
             print_r($data);
-            if ($this->reunion_model->insertar($data)) {
+            if ($this->Reunion_model->insertar($data)) {
                 $this->session->set_flashdata('correcto', "Registro Creado");
             } else {
                 echo "hubo un error !!";
             }
-            redirect("reuniones_controller/index");
+            redirect("Reuniones_controller/index");
         } catch (\Throwable $th) {
             echo "el correo ya esta registrado.";
         }
     }
     public function eliminarReunion($id_reu)
     {
-        if ($this->reunion_model->borrar($id_reu)) {
+        if ($this->Reunion_model->borrar($id_reu)) {
             $this->session->set_flashdata('eliminar', "Registro eliminado");
         } else {
             echo "ocurrio un error";
         }
-        redirect("reuniones_controller/index");
+        redirect("Reuniones_controller/index");
     }
     public function actualizarReunion()
     {
@@ -121,12 +125,33 @@ class reuniones_controller extends CI_Controller
         );
         $id_reu = $this->input->post("id_reu"); 
         // print_r($id_not);
-        if ($this->reunion_model->procesoActu($id_reu, $data)) {
+        if ($this->Reunion_model->procesoActu($id_reu, $data)) {
             $this->session->set_flashdata("actualizar", "Registro Actualizado correctamente.");
         } else {
             $this->session->set_flashdata("eliminar", "algo salio mal intente otra ves.");
             echo "no se pudo actualizar";
         }
-        redirect("reuniones_controller/index");
+        redirect("Reuniones_controller/index");
+    }
+    public function obtenerEventosModales() {
+        
+        if (
+            $this->session->userdata("conectado")->perfil == "ADMINISTRADOR" ||
+            $this->session->userdata("conectado")->perfil == "PRESIDENTE" ||
+            $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
+            $this->session->userdata("conectado")->perfil == "GERENTE" ||
+            $this->session->userdata("conectado")->perfil == "SOCIO"
+        ) {
+            $datos = $this->Reunion_model->obtenerDatos();
+    
+            if ($datos) {
+                echo json_encode($datos);
+            } else {
+                echo json_encode([]);
+            }
+        } else {
+            
+            echo json_encode(['error' => 'Acceso no autorizado']);
+        }
     }
 }

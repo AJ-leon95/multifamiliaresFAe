@@ -9,7 +9,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <?php if ($datosEmpresa) { ?>
-                    <form action="<?php echo site_url("/usuarios_controller/actualizar") ?>" method="post" enctype="multipart/form-data">
+                    <form action="<?php echo site_url("/Usuarios_controller/actualizar") ?>" method="post" enctype="multipart/form-data">
                         <input hidden value="<?php echo $usuario->id_usu ?>" type="text" class="form-control" name="id_usu" id="id_usu" aria-describedby="helpId" placeholder="ingrese su nombre" />
                         <?php foreach ($datosEmpresa as $emp) { ?>
                             <input hidden value="<?php echo $emp->id_emp ?>" type="text" class="form-control" name="fk_usu_emp" id="fk_usu_emp" aria-describedby="helpId" placeholder="ingrese su nombre" />
@@ -90,7 +90,7 @@
                             <center>
                                 <br>
                                 <button type="submit" class="btn btn-warning">Actualizar</button>
-                                <a name="" id="" class="btn btn-danger" href="#" role="button">Cancelar</a>
+                                <a name="" id="" class="btn btn-danger" href="<?php $id_usu = $this->session->userdata("conectado")->id_usu; echo site_url("/Usuarios_controller/perfil/$id_usu") ?>" role="button">Cancelar</a>
 
 
                             </center>

@@ -13,7 +13,7 @@
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-dark" title="Collapse"> <!-- data-card-widget="collapse" -->
-                        <i class="fas fa-plus"> <a href="<?php echo site_url("/notificaciones_controller/nuevoNotificacion") ?>" style="color: white;"> Nueva Notificación</a></i>
+                        <i class="fas fa-plus"> <a href="<?php echo site_url("/Notificaciones_controller/nuevoNotificacion") ?>" style="color: white;"> Nueva Notificación</a></i>
                     </button>
                 </div>
             </div>
@@ -44,9 +44,10 @@
                                     <td><?php echo $registro->nombres ." ".$registro->apellidos  ?></td>
                                     <td class="text-right py-0 align-middle">
                                         <div class="btn-group btn-group-sm">
-                                        <a href="<?php echo site_url("/notificaciones_controller/enviarNotificacion/") ?>" title="Enviar notificacion" class="btn btn-success"><i class="fas fa-envelope bg-blue"></i></a>
-                                            <a href="<?php echo site_url("/notificaciones_controller/editarNotificacion/$registro->id_not") ?>" title="Editar notificacion" class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                            <a href="<?php echo site_url("/notificaciones_controller/eliminarNotificacion/$registro->id_not") ?>" title="Eliminar notificacion" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                        <a target="_blank" href="<?php echo site_url("/PdfController/notificacion/$registro->id_not") ?>" title="Imprimir notificacion" class="btn btn-success"><i class="fas fa-print"></i></i></a>
+                                        <a href="<?php echo site_url("/PhpMailer_controller/enviarNotificacion/$registro->id_not") ?>" title="Enviar notificacion" class="btn btn-success"><i class="fas fa-envelope bg-blue"></i></a>
+                                            <a href="<?php echo site_url("/Notificaciones_controller/editarNotificacion/$registro->id_not") ?>" title="Editar notificacion" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                            <a href="<?php echo site_url("/Notificaciones_controller/eliminarNotificacion/$registro->id_not") ?>" title="Eliminar notificacion" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -57,9 +58,34 @@
             </div>
             <br>
         </div>
-    <?php } else {
-    echo "no hay datos ";
-} ?>
+    <?php } else {?>
+  
+  <section class="content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-12">
+
+              <div class="callout callout-info">
+                  <h5><i class="fas fa-info"></i> Información: </h5>
+                  <div class="card-tools d-flex justify-content-end">
+                      <button type="button" class="btn btn-dark" title="Collapse">
+                          <a href="<?php echo site_url("/Notificaciones_controller/nuevoNotificacion") ?>" style="color: white;">Nueva Notificación</a>
+                          <i class="fas fa-plus"></i>
+                      </button>
+                  </div>
+
+                  Actualmente no existen ninguna notificacion en la base de datos.
+              </div>
+
+
+              <!-- Main content -->
+
+              <!-- /.invoice -->
+          </div><!-- /.col -->
+      </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+<?php } ?>
 
     <script type="text/javascript">
         $("#tbl")

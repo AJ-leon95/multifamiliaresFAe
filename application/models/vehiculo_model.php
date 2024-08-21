@@ -1,5 +1,5 @@
 <?php 
-class vehiculo_model extends CI_Model {
+class Vehiculo_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
@@ -45,6 +45,11 @@ class vehiculo_model extends CI_Model {
 
         return $query->result();
     }
+    public function obtenerVehiculo() {
+        $query = $this->db->query("SELECT v.*, u_propietario.*, COALESCE(c.nombres_cho, 'No hay chofer asignado') AS nombres_chofer, COALESCE(c.apellidos_cho, '') AS apellidos_chofer, COALESCE(c.telefono_cho, '') AS telefono_chofer, COALESCE(c.foto_cho, '') AS foto_chofer FROM vehiculos v JOIN usuarios u_propietario ON v.fk_veh_usu = u_propietario.id_usu LEFT JOIN veh_cho vc ON v.id_veh = vc.fk_vc_veh LEFT JOIN chofer c ON vc.fk_vc_cho = c.id_cho;");
+
+        return $query->result();
+    }
     public function obtener_vehiculo($id_usu)
     {
         $this->db->select('id_veh');
@@ -54,7 +59,10 @@ class vehiculo_model extends CI_Model {
 
         return $query->row(); // Retorna una sola fila como objeto
     }
-    
+    public function status($status_veh, $id_veh) {
+        $query = $this->db->query("UPDATE vehiculos SET estado = '$status_veh' WHERE id_veh =$id_veh;");
+
+    }
 
 }
 

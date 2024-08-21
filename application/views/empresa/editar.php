@@ -1,3 +1,7 @@
+<script>
+    $("#menu_empresa").addClass("active");    
+</script>
+
 <br>
 <div class="container">
     <div class="row">
@@ -9,7 +13,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <?php if ($emp) { ?>
-                    <form action="<?php echo site_url("/empresas_controller/ActualizarDatos") ?>" method="post" enctype="multipart/form-data">
+                    <form action="<?php echo site_url("/Empresas_controller/ActualizarDatos") ?>" method="post" enctype="multipart/form-data">
                         <input hidden value="<?php echo $emp->id_emp ?>" type="text" class="form-control" name="id_emp" id="id_emp" aria-describedby="helpId" placeholder="ingrese su nombre" />
                    
                   
@@ -89,7 +93,7 @@
                             <center>
                                 <br>
                                 <button type="submit" class="btn btn-warning">Actualizar</button>
-                                <a name="" id="" class="btn btn-danger" href="#" role="button">Cancelar</a>
+                                <a name="" id="" class="btn btn-danger" href="<?php echo site_url("/Empresas_controller/index") ?>" role="button">Cancelar</a>
 
 
                             </center>

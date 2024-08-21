@@ -1,5 +1,5 @@
 <script>
-    $("#menu_notificacion").addClass("active");
+    $("#reunion").addClass("active");
 </script>
 <br><?php
     date_default_timezone_set('America/Guayaquil');
@@ -15,11 +15,11 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <?php if ($empresa) { ?>
-                    <form action="<?php echo site_url("/reuniones_controller/actualizarReunion") ?>" method="post" enctype="multipart/form-data" id="frm">
+                    <form action="<?php echo site_url("/Reuniones_controller/actualizarReunion") ?>" method="post" enctype="multipart/form-data" id="frm">
                     <?php foreach($empresa as $registro){ ?>
                     <input hidden value="<?php echo $registro->id_emp ?>" type="text" class="form-control" name="fk_reu_emp" id="fk_reu_emp" aria-describedby="helpId" placeholder="ingrese el lugar de la reunión" />
                         <?php } ?>
-                        <input value="<?php echo $reunion->id_reu ?>" type="text" class="form-control" name="id_reu" id="id_reu" aria-describedby="helpId" placeholder="ingrese el lugar de la reunión" />
+                        <input hidden value="<?php echo $reunion->id_reu ?>" type="text" class="form-control" name="id_reu" id="id_reu" aria-describedby="helpId" placeholder="ingrese el lugar de la reunión" />
 
                         <div class="row">
                             <div class="col-4">

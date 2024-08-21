@@ -1,5 +1,5 @@
 <script>
-    $("#menu_admin").addClass("active");
+    $("#asignacion").addClass("active");
 </script>
 <br>
 <?php if ($veh_cho) { ?>
@@ -13,7 +13,7 @@
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-dark" title="Collapse"> <!-- data-card-widget="collapse" -->
-                        <i class="fas fa-plus"> <a href="<?php echo site_url("/veh_cho_controller/nuevo") ?>" style="color: white;"> Asignar vehiculo con chofer</a></i>
+                        <i class="fas fa-plus"> <a href="<?php echo site_url("/Veh_cho_controller/nuevo") ?>" style="color: white;"> Asignar vehiculo con chofer</a></i>
                     </button>
                 </div>
             </div>
@@ -51,8 +51,8 @@
                             
                                 <td class="text-right py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
-                                        <a href="<?php echo site_url("/veh_cho_controller/editar/$registro->id_veh_cho") ?>" title="Editar " class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                        <a href="<?php echo site_url("/veh_cho_controller/eliminar/$registro->id_veh_cho") ?>" title="Eliminar " class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                        <a href="<?php echo site_url("/Veh_cho_controller/editar/$registro->id_veh_cho") ?>" title="Editar " class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                        <a href="<?php echo site_url("/Veh_cho_controller/eliminar/$registro->id_veh_cho") ?>" title="Eliminar " class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -75,7 +75,7 @@
                             <h5><i class="fas fa-info"></i> Información: </h5>
                             <div class="card-tools d-flex justify-content-end">
                                 <button type="button" class="btn btn-dark" title="Collapse">
-                                    <a href="<?php echo site_url("/veh_cho_controller/nuevo") ?>" style="color: white;">Asignar vehiculo con chofer</a>
+                                    <a href="<?php echo site_url("/Veh_cho_controller/nuevo") ?>" style="color: white;">Asignar vehiculo con chofer</a>
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>

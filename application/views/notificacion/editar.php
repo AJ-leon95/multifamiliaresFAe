@@ -15,7 +15,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <?php if ($empresa) { ?>
-                    <form action="<?php echo site_url("/notificaciones_controller/ActualizarNotificacion") ?>" method="post" enctype="multipart/form-data" id="frm">
+                    <form action="<?php echo site_url("/Notificaciones_controller/ActualizarNotificacion") ?>" method="post" enctype="multipart/form-data" id="frm">
                     <input hidden value="<?php echo $notificacion->id_not?>" type="text" class="form-control" name="id_not" id="id_not" aria-describedby="helpId" placeholder="" />
 
                         <div class="row">

@@ -1,24 +1,30 @@
 <?php
-class choferes_controller extends CI_Controller
+class Choferes_controller extends CI_Controller
 {
 
     public function __construct()
     {
-        parent::__construct();
-        $this->load->model("chofer_model");
+        parent::__construct();      
+        $this->load->library('session');
+        if (!$this->session->userdata('conectado')) {
+            redirect('/Vista_general/login'); 
+        }
+        
+        $this->load->model("Chofer_model");
         $this->load->library("form_validation");
     }
 
 
     public function index()
     {
+
         if (
             $this->session->userdata("conectado")->perfil == "ADMINISTRADOR" ||
             $this->session->userdata("conectado")->perfil == "PRESIDENTE" ||
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["choferes"] = $this->chofer_model->obtenerDatos();
+            $data["choferes"] = $this->Chofer_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("choferes/index", $data);
             $this->load->view("administracion/footer");
@@ -46,7 +52,7 @@ class choferes_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["editarChofer"]=$this->chofer_model->obtenerRegistro($id_cho);
+            $data["editarChofer"]=$this->Chofer_model->obtenerRegistro($id_cho);
             $this->load->view("administracion/header");
             $this->load->view("choferes/editar",$data);
             $this->load->view("administracion/footer");
@@ -54,22 +60,8 @@ class choferes_controller extends CI_Controller
     }
     public function reglasValidacionEditar()
     {
-        $this->form_validation->set_rules(
-            'correo_cho',
-            'Correo',
-            'required',//|is_unique[usuarios.correo]
-            array(
-                'required' => 'Este campo es requerido.',
-            )
-        );
-        $this->form_validation->set_rules(
-            'contrasenia_cho',
-            'Contraseña',
-            'required',
-            array(
-                'required' => 'Este campo es requerido.',
-            )
-        );
+        
+      
         $this->form_validation->set_rules(
             'nombres_cho',
             'Nombres',
@@ -86,22 +78,8 @@ class choferes_controller extends CI_Controller
                 'required' => 'Este campo es requerido.',
             )
         );
-        $this->form_validation->set_rules(
-            'estado_cho',
-            'Estado',
-            'required',
-            array(
-                'required' => 'Este campo es requerido.',
-            )
-        );
-        $this->form_validation->set_rules(
-            'cedula_cho',
-            'Cedula',
-            'required',//|is_unique[usuarios.cedula_usu]
-            array(
-                'required' => 'Este campo es requerido.',
-            )
-        );
+    
+        
         $this->form_validation->set_rules(
             'telefono_cho',
             'Telefono',
@@ -115,23 +93,8 @@ class choferes_controller extends CI_Controller
     }
     public function reglasValidacion()
     {
-        $this->form_validation->set_rules(
-            'correo_cho',
-            'Correo',
-            'required|is_unique[chofer.correo_cho]|is_unique[usuarios.correo]',//|is_unique[usuarios.correo]
-            array(
-                'required' => 'Este campo es requerido.',
-                'is_unique' => 'El correo ya esta registrado como socio o chofer.'
-            )
-        );
-        $this->form_validation->set_rules(
-            'contrasenia_cho',
-            'Contraseña',
-            'required',
-            array(
-                'required' => 'Este campo es requerido.',
-            )
-        );
+        
+       
         $this->form_validation->set_rules(
             'nombres_cho',
             'Nombres',
@@ -148,23 +111,8 @@ class choferes_controller extends CI_Controller
                 'required' => 'Este campo es requerido.',
             )
         );
-        $this->form_validation->set_rules(
-            'estado_cho',
-            'Estado',
-            'required',
-            array(
-                'required' => 'Este campo es requerido.',
-            )
-        );
-        $this->form_validation->set_rules(
-            'cedula_cho',
-            'Cedula',
-            'required|is_unique[chofer.cedula_cho]|is_unique[usuarios.cedula_usu]',//|is_unique[usuarios.cedula_usu]
-            array(
-                'required' => 'Este campo es requerido.',
-                'is_unique' => 'El numero de cedula ya esta registrado como socio o chofer.'
-            )
-        );
+      
+        
         $this->form_validation->set_rules(
             'telefono_cho',
             'Telefono',
@@ -214,12 +162,12 @@ class choferes_controller extends CI_Controller
                     $dataSubida = $this->upload->data();
                     $data["foto_cho"] = $dataSubida['file_name'];
                 }
-                if ($this->chofer_model->insertar($data)) {
+                if ($this->Chofer_model->insertar($data)) {
                     $this->session->set_flashdata('correcto', "Registro Creado");
                 } else {
                     echo "hubo un error !!";
                 }
-                redirect("choferes_controller/index");
+                redirect("Choferes_controller/index");
              
             }
         } catch (\Throwable $th) {
@@ -248,7 +196,7 @@ class choferes_controller extends CI_Controller
             
         } else {
             $id_cho = $this->input->post("id_cho");
-            $chofer = $this->chofer_model->obtenerRegistro($id_cho);
+            $chofer = $this->Chofer_model->obtenerRegistro($id_cho);
             // print_r($data);
     
             //foto
@@ -273,19 +221,19 @@ class choferes_controller extends CI_Controller
                     echo "no hay";
                 }
             }
-            if ($this->chofer_model->procesoActu($id_cho, $data)) {
+            if ($this->Chofer_model->procesoActu($id_cho, $data)) {
                 $this->session->set_flashdata("actualizar", "Registro Actualizado correctamente.");
             } else {
                 $this->session->set_flashdata("eliminar", "algo salio mal intente otra ves.");
                 echo "no se pudo actualizar";
             }
-            redirect("choferes_controller/index");
+            redirect("Choferes_controller/index");
         }
     }
     public function eliminarChofer($id_cho)
     {
 
-        $chofer = $this->chofer_model->obtenerRegistro($id_cho);
+        $chofer = $this->Chofer_model->obtenerRegistro($id_cho);
         $ruta = 'uploads/chofer/' . $chofer->foto_cho;
         // print_r($ruta);
         if (file_exists($ruta)) {
@@ -294,12 +242,12 @@ class choferes_controller extends CI_Controller
         } else {
             echo "algo salio mal en la eliminacion de la foto";
         }
-        if ($this->chofer_model->borrar($id_cho)) {
+        if ($this->Chofer_model->borrar($id_cho)) {
             $this->session->set_flashdata('eliminar', "Registro eliminado");
         } else {
             echo "ocurrio un error";
         }
-        redirect("/choferes_controller/index");
+        redirect("/Choferes_controller/index");
     }
 
       

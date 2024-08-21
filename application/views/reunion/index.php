@@ -1,5 +1,5 @@
 <script>
-    $("#menu_admin").addClass("active");
+    $("#reunion").addClass("active");
 </script>
 <br>
 <?php if ($reuniones) { ?>
@@ -13,7 +13,7 @@
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-dark" title="Collapse"> <!-- data-card-widget="collapse" -->
-                        <i class="fas fa-plus"> <a href="<?php echo site_url("/reuniones_controller/nuevoReunion") ?>" style="color: white;"> Nueva Reunion</a></i>
+                        <i class="fas fa-plus"> <a href="<?php echo site_url("/Reuniones_controller/nuevoReunion") ?>" style="color: white;"> Nueva Reunion</a></i>
                     </button>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                                 <td><?php echo $registro->fecha_reu ?></td>
                                 <td><?php echo $registro->hora_reu ?></td>
                                 <td><?php echo $registro->lugar_reu ?></td>
-                                <td><?php   echo $registro->punto1 ?></td>
+                                <td><?php echo $registro->punto1 ?></td>
                                 <td><?php echo $registro->punto2  ?></td>
                                 <td><?php echo $registro->punto3  ?></td>
                                 <td><?php echo $registro->punto4  ?></td>
@@ -54,10 +54,10 @@
                                 <td><?php echo $registro->punto7  ?></td>
                                 <td class="text-right py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
-                                        <a href="<?php echo site_url("/reuniones_controller/enviarCorreos/$registro->id_reu") ?>" title="Enviar " class="btn btn-success"><i class="fas fa-p "></i></a>
-                                        <a href="<?php echo site_url("/reuniones_controller/enviarCorreos/$registro->id_reu") ?>" title="Enviar " class="btn btn-success"><i class="fas fa-envelope bg-blue"></i></a>
-                                        <a href="<?php echo site_url("/reuniones_controller/editarReunion/$registro->id_reu") ?>" title="Editar " class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                        <a href="<?php echo site_url("/reuniones_controller/eliminarReunion/$registro->id_reu") ?>" title="Eliminar " class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    <a target="_blank" href="<?php echo site_url("/PdfController/reunion/$registro->id_reu") ?>" title="Imprimir notificacion" class="btn btn-success"><i class="fas fa-print"></i></i></a>
+                                        <a href="<?php echo site_url("/PhpMailer_controller/enviarReuniones/$registro->id_reu") ?>" title="Enviar " class="btn btn-success"><i class="fas fa-envelope ag-blue"></i></a>
+                                        <a href="<?php echo site_url("/Reuniones_controller/editarReunion/$registro->id_reu") ?>" title="Editar " class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                        <a href="<?php echo site_url("/Reuniones_controller/eliminarReunion/$registro->id_reu") ?>" title="Eliminar " class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -80,7 +80,7 @@
                             <h5><i class="fas fa-info"></i> Información: </h5>
                             <div class="card-tools d-flex justify-content-end">
                                 <button type="button" class="btn btn-dark" title="Collapse">
-                                    <a href="<?php echo site_url("/reuniones_controller/nuevoReunion") ?>" style="color: white;">Nueva Reunion</a>
+                                    <a href="<?php echo site_url("/Reuniones_controller/nuevoReunion") ?>" style="color: white;">Nueva Reunion</a>
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>

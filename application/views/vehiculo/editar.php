@@ -15,8 +15,9 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <?php if ($usuario) { ?>
-                    <form action="<?php echo site_url("/vehiculos_controller/actualizar") ?>" method="post" enctype="multipart/form-data" id="frm">
+                    <form action="<?php echo site_url("/Vehiculos_controller/actualizar") ?>" method="post" enctype="multipart/form-data" id="frm">
                     <input hidden value="<?php echo $usuarioEditar->id_veh ?>" type="text" class="form-control" name="id_veh" id="id_veh" aria-describedby="helpId" placeholder="Ingrese el modelo" />
+                    <input hidden type="text" class="form-control" name="estado" id="estado" value="LIBRE" aria-describedby="helpId"  />
 
                         <div class="row">
                             <div class="col-3">
@@ -129,7 +130,7 @@
             <center>
                 <br>
                 <button type="submit" class="btn btn-warning">Actualizar</button>
-                <a name="" id="" class="btn btn-danger" href="<?php echo site_url("/vehiculos_controller/index") ?>" role="button">Cancelar</a>
+                <a name="" id="" class="btn btn-danger" href="<?php echo site_url("/Vehiculos_controller/index") ?>" role="button">Cancelar</a>
 
 
             </center>

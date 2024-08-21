@@ -1,5 +1,5 @@
 <script>
-    $("#menu_veh_cho").addClass("active");
+    $("#asignacion").addClass("active");
 </script>
 <br><?php
     date_default_timezone_set('America/Guayaquil');
@@ -15,7 +15,7 @@
             <!-- /.card-header -->
             <div class="card-body">
 
-                <form action="<?php echo site_url("/veh_cho_controller/Actualizar") ?>" method="post" enctype="multipart/form-data" id="frm">
+                <form action="<?php echo site_url("/Veh_cho_controller/Actualizar") ?>" method="post" enctype="multipart/form-data" id="frm">
                 <input hidden value="<?php echo $veh_cho_editar->id_veh_cho ?>" type="text" class="form-control" name="id_veh_cho" id="id_veh_cho" aria-describedby="helpId" placeholder="" />
 
                     <div class="row">
@@ -85,7 +85,7 @@
                     <center>
                         <br>
                         <button type="submit" class="btn btn-warning">Actualizar</button>
-                        <a name="" id="" class="btn btn-danger" href="<?php echo site_url("/veh_cho_controller/index") ?>" role="button">Cancelar</a>
+                        <a name="" id="" class="btn btn-danger" href="<?php echo site_url("/Veh_cho_controller/index") ?>" role="button">Cancelar</a>
 
 
                     </center>

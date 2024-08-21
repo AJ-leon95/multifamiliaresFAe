@@ -2,15 +2,19 @@
  use PHPMailer\PHPMailer\PHPMailer;
  use PHPMailer\PHPMailer\SMTP;
  use PHPMailer\PHPMailer\Exception;
-class notificaciones_controller extends CI_Controller
+class Notificaciones_controller extends CI_Controller
 {
 
     public function __construct()
     {
-        parent::__construct();
-        $this->load->model("empresa_model");
-        $this->load->model("usuario_model");
-        $this->load->model("notificacion_model");
+        parent::__construct();      
+        $this->load->library('session');
+        if (!$this->session->userdata('conectado')) {
+            redirect('/Vista_general/login'); 
+        }
+        $this->load->model("Empresa_model");
+        $this->load->model("Usuario_model");
+        $this->load->model("Notificacion_model");
     }
     public function index()
     {
@@ -20,12 +24,13 @@ class notificaciones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["notificacion"] = $this->notificacion_model->obtenerDatos();
+            $data["notificacion"] = $this->Notificacion_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("notificacion/index", $data);
             $this->load->view("administracion/footer");
         }
     }
+    
     public function reportes()
     {       
         if (
@@ -37,7 +42,7 @@ class notificaciones_controller extends CI_Controller
         ) {
             $fk_not_usu = $this->session->userdata("conectado")->id_usu;
 
-            $data["notificacion"] = $this->notificacion_model->notificacionesPersonales($fk_not_usu);
+            $data["notificacion"] = $this->Notificacion_model->notificacionesPersonales($fk_not_usu);
             $this->load->view("administracion/header");
             $this->load->view("notificacion/reportes", $data);
             $this->load->view("administracion/footer");
@@ -51,9 +56,9 @@ class notificaciones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            // $data["dataUsu"] = $this->empresa_model->obtenerDatosUsu();
-            $data["empresa"] = $this->empresa_model->obtenerDatos();
-            $data["usuario"] = $this->usuario_model->obtenerDatosUsu();
+            // $data["dataUsu"] = $this->Empresa_model->obtenerDatosUsu();
+            $data["empresa"] = $this->Empresa_model->obtenerDatos();
+            $data["usuario"] = $this->Usuario_model->obtenerDatosUsu();
             $this->load->view("administracion/header");
             $this->load->view("notificacion/nuevo", $data);
             $this->load->view("administracion/footer");
@@ -67,9 +72,9 @@ class notificaciones_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["notificacion"] = $this->notificacion_model->obtenerRegistro($id_not);
-            $data["empresa"] = $this->empresa_model->obtenerDatos();
-            $data["usuario"] = $this->usuario_model->obtenerDatosUsu();
+            $data["notificacion"] = $this->Notificacion_model->obtenerRegistro($id_not);
+            $data["empresa"] = $this->Empresa_model->obtenerDatos();
+            $data["usuario"] = $this->Usuario_model->obtenerDatosUsu();
             $this->load->view("administracion/header");
             $this->load->view("notificacion/editar", $data);
             $this->load->view("administracion/footer");
@@ -86,12 +91,12 @@ class notificaciones_controller extends CI_Controller
                 "fk_not_usu" => $this->input->post("fk_not_usu"),
             );
             print_r($data);
-            if ($this->notificacion_model->insertar($data)) {
+            if ($this->Notificacion_model->insertar($data)) {
                 $this->session->set_flashdata('correcto', "Registro Creado");
             } else {
                 echo "hubo un error !!";
             }
-            redirect("notificaciones_controller/index");
+            redirect("Notificaciones_controller/index");
         } catch (\Throwable $th) {
             echo "el correo ya esta registrado.";
         }
@@ -124,10 +129,10 @@ class notificaciones_controller extends CI_Controller
         if(!$mail->send()){
             echo 'Message could not be sent.';
             echo 'Mailer Error: ' . $mail->ErrorInfo;
-        //  redirect("/notificaciones_controller/index");
+        //  redirect("/Notificaciones_controller/index");
         }else{
             $this->session->set_flashdata("EnviarCorreo", "Revise su correo.");
-            redirect("/notificaciones_controller/index");
+            redirect("/Notificaciones_controller/index");
             echo "revise su correo";
         }
         
@@ -135,12 +140,12 @@ class notificaciones_controller extends CI_Controller
 
     public function eliminarNotificacion($id_not)
     {
-        if ($this->notificacion_model->borrar($id_not)) {
+        if ($this->Notificacion_model->borrar($id_not)) {
             $this->session->set_flashdata('eliminar', "Registro eliminado");
         } else {
             echo "ocurrio un error";
         }
-        redirect("notificaciones_controller/index");
+        redirect("Notificaciones_controller/index");
     }
     public function ActualizarNotificacion()
     {
@@ -154,12 +159,12 @@ class notificaciones_controller extends CI_Controller
         );
         $id_not = $this->input->post("id_not"); 
         print_r($id_not);
-        if ($this->notificacion_model->procesoActu($id_not, $data)) {
+        if ($this->Notificacion_model->procesoActu($id_not, $data)) {
             $this->session->set_flashdata("actualizar", "Registro Actualizado correctamente.");
         } else {
             $this->session->set_flashdata("eliminar", "algo salio mal intente otra ves.");
             echo "no se pudo actualizar";
         }
-        redirect("notificaciones_controller/index");
+        redirect("Notificaciones_controller/index");
     }
 }

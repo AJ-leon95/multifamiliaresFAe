@@ -1,14 +1,18 @@
 <?php
-class vehiculos_controller extends CI_Controller
+class Vehiculos_controller extends CI_Controller
 {
 
     public function __construct()
     {
-        parent::__construct();
-        $this->load->model("usuario_model");
-        $this->load->model("vehiculo_model");
+        parent::__construct();      
+        $this->load->library('session');
+        if (!$this->session->userdata('conectado')) {
+            redirect('/Vista_general/login'); 
+        }
+        $this->load->model("Usuario_model");
+        $this->load->model("Vehiculo_model");
         $this->load->library("form_validation");
-        // $this->load->helper("/vehiculo_helper/reglas_vehiculo_helper");
+       
     }
     public function index()
     {
@@ -18,7 +22,7 @@ class vehiculos_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["vehiculo"] = $this->vehiculo_model->obtenerDatos();
+            $data["vehiculo"] = $this->Vehiculo_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("vehiculo/index", $data);
             $this->load->view("administracion/footer");
@@ -32,8 +36,8 @@ class vehiculos_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["usuario"] = $this->vehiculo_model->obtener_usuarios_sin_vehiculo();
-            $data["unidad"] = $this->vehiculo_model->obtener_unidad_con_numero();
+            $data["usuario"] = $this->Vehiculo_model->obtener_usuarios_sin_vehiculo();
+            $data["unidad"] = $this->Vehiculo_model->obtener_unidad_con_numero();
             $this->load->view("administracion/header");
             $this->load->view("vehiculo/nuevo", $data);
             $this->load->view("administracion/footer");
@@ -47,8 +51,8 @@ class vehiculos_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) {
-            $data["usuario"] = $this->vehiculo_model->obtener_usuarios_sin_vehiculo();
-            $data["usuarioEditar"] = $this->vehiculo_model->obtenerRegistro($id_veh);
+            $data["usuario"] = $this->Vehiculo_model->obtener_usuarios_sin_vehiculo();
+            $data["usuarioEditar"] = $this->Vehiculo_model->obtenerRegistro($id_veh);
             $this->load->view("administracion/header");
             $this->load->view("vehiculo/editar", $data);
             $this->load->view("administracion/footer");
@@ -60,11 +64,11 @@ class vehiculos_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "ADMINISTRADOR" ||
             $this->session->userdata("conectado")->perfil == "PRESIDENTE" ||
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
-            $this->session->userdata("conectado")->perfil == "GERENTE"||
+            $this->session->userdata("conectado")->perfil == "GERENTE" ||
             $this->session->userdata("conectado")->perfil == "SOCIO"
         ) {
-            // $data["usuario"] = $this->vehiculo_model->obtener_usuarios_sin_vehiculo();
-            $data["usuarioEditar"] = $this->vehiculo_model->obtenerRegistro($id_veh);
+            // $data["usuario"] = $this->Vehiculo_model->obtener_usuarios_sin_vehiculo();
+            $data["usuarioEditar"] = $this->Vehiculo_model->obtenerRegistro($id_veh);
             $this->load->view("administracion/header");
             $this->load->view("vehiculo/editarPersonal", $data);
             $this->load->view("administracion/footer");
@@ -77,74 +81,80 @@ class vehiculos_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "PRESIDENTE" ||
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE" ||
-            $this->session->userdata("conectado")->perfil == "SOCIO"||
+            $this->session->userdata("conectado")->perfil == "SOCIO" ||
             $this->session->userdata("conectado")->perfil == "CLIENTE"
         ) {
-            $data["vehUsuario"] = $this->vehiculo_model->obtenerDatos();
+            $data["vehUsuario"] = $this->Vehiculo_model->obtenerDatos();
             $this->load->view("administracion/header");
             $this->load->view("vehiculo/reporteVehiculos", $data);
             $this->load->view("administracion/footer");
         }
     }
- 
-        public function reglasValidacion(){
-            $this->form_validation->set_rules(
-                'numero',
-                'Numero',
-                'required|is_unique[vehiculos.numero]',
-                array(
-                    'required' => 'Este campo es requerido.',
-                    'is_unique' => 'El numero ya esta registrado en la base de datos.'
-                ));
-            $this->form_validation->set_rules(
-                'marca_veh',
-                'Marca',
-                'required',
-                array(
-                    'required' => 'Este campo es requerido.',
-                ));
-            $this->form_validation->set_rules(
-                'anio_veh',
-                'Año Fabricacion',
-                'required',
-                array(
-                    'required' => 'Este campo es requerido.',
-                ));
-            $this->form_validation->set_rules(
-                'modelo_veh',
-                'Modelo',
-                'required',
-                array(
-                    'required' => 'Este campo es requerido.',
-                ));
-            $this->form_validation->set_rules(
-                'status_veh',
-                'Status',
-                'required',
-                array(
-                    'required' => 'Este campo es requerido.',
-                ));
-            $this->form_validation->set_rules(
-                'fk_veh_usu',
-                'Propietario',
-                'required',
-                array(
-                    'required' => 'Este campo es requerido.',
-                ));
-                $this->form_validation->set_rules(
-                    'placa_veh',
-                    'Placa',
-                    'required|regex_match[/^[A-Z]{3}-\d{3}$/]|is_unique[vehiculos.placa_veh]',
-                    array(
-                        'required' => 'Este campo es requerido.',
-                        'regex_match' => 'La placa debe tener el formato AAA-123.',
-                        'is_unique' => 'La paca ingresada ya esta registrada.'
-                    )
-                );
-                
-        }
 
-     
+    public function reglasValidacion()
+    {
+        $this->form_validation->set_rules(
+            'numero',
+            'Numero',
+            'required|is_unique[vehiculos.numero]',
+            array(
+                'required' => 'Este campo es requerido.',
+                'is_unique' => 'El numero ya esta registrado en la base de datos.'
+            )
+        );
+        $this->form_validation->set_rules(
+            'marca_veh',
+            'Marca',
+            'required',
+            array(
+                'required' => 'Este campo es requerido.',
+            )
+        );
+        $this->form_validation->set_rules(
+            'anio_veh',
+            'Año Fabricacion',
+            'required',
+            array(
+                'required' => 'Este campo es requerido.',
+            )
+        );
+        $this->form_validation->set_rules(
+            'modelo_veh',
+            'Modelo',
+            'required',
+            array(
+                'required' => 'Este campo es requerido.',
+            )
+        );
+        $this->form_validation->set_rules(
+            'status_veh',
+            'Status',
+            'required',
+            array(
+                'required' => 'Este campo es requerido.',
+            )
+        );
+        $this->form_validation->set_rules(
+            'fk_veh_usu',
+            'Propietario',
+            'required',
+            array(
+                'required' => 'Este campo es requerido.',
+            )
+        );
+        $this->form_validation->set_rules(
+            'placa_veh',
+            'Placa',
+            'required|regex_match[/^[A-Z]{3}-\d{4}$/]|is_unique[vehiculos.placa_veh]',
+            array(
+                'required' => 'Este campo es requerido.',
+                'regex_match' => 'La placa debe tener el formato AAA-1234.',
+                'is_unique' => 'La placa ingresada ya está registrada.'
+            )
+        );
+    }
+
+
     public function guardarVeiculo()
     {
         try {
@@ -155,14 +165,15 @@ class vehiculos_controller extends CI_Controller
                 "modelo_veh" => $this->input->post("modelo_veh"),
                 "status_veh" => $this->input->post("status_veh"),
                 "fk_veh_usu" => $this->input->post("fk_veh_usu"),
+                "estado" => $this->input->post("estado"),
                 "numero" => $this->input->post("numero"),
                 // "foto" => $this->input->post("foto"),
 
             );
-           $this->reglasValidacion();
+            $this->reglasValidacion();
 
             if ($this->form_validation->run() == false) {
-            $this->nuevovehiculo();
+                $this->nuevovehiculo();
             } else {
                 $this->load->library("upload");
                 $new_name = "foto_Auto" . time() . "_" . rand(1, 5000);
@@ -178,14 +189,14 @@ class vehiculos_controller extends CI_Controller
                     // print_r($data["foto"]);
 
                 }
-                if ($this->vehiculo_model->insertar($data)) {
+                if ($this->Vehiculo_model->insertar($data)) {
                     $this->session->set_flashdata('correcto', "Registro Creado");
                 } else {
                     echo "hubo un error !!";
                 }
-                redirect("vehiculos_controller/index");
+                redirect("Vehiculos_controller/index");
             }
-            // redirect("vehiculos_controller/nuevovehiculo");
+            // redirect("Vehiculos_controller/nuevovehiculo");
             //  print_r($data);
 
         } catch (\Throwable $th) {
@@ -194,12 +205,12 @@ class vehiculos_controller extends CI_Controller
 
     public function eliminarVehiculo($id_veh)
     {
-        if ($this->vehiculo_model->borrar($id_veh)) {
+        if ($this->Vehiculo_model->borrar($id_veh)) {
             $this->session->set_flashdata('eliminar', "Registro eliminado");
         } else {
             echo "ocurrio un error";
         }
-        redirect("vehiculos_controller/index");
+        redirect("Vehiculos_controller/index");
     }
     public function actualizar()
     {
@@ -210,10 +221,12 @@ class vehiculos_controller extends CI_Controller
             "modelo_veh" => $this->input->post("modelo_veh"),
             "status_veh" => $this->input->post("status_veh"),
             "fk_veh_usu" => $this->input->post("fk_veh_usu"),
+            "estado" => $this->input->post("estado"),
+
         );
 
         $id_veh = $this->input->post("id_veh");
-        $vehiculo = $this->vehiculo_model->obtenerRegistro($id_veh);
+        $vehiculo = $this->Vehiculo_model->obtenerRegistro($id_veh);
         //foto
         $this->load->library("upload");
         $new_name = "new_vehiculo" . time() . "_" . rand(1, 5000);
@@ -235,12 +248,12 @@ class vehiculos_controller extends CI_Controller
                 echo "no hay";
             }
         }
-        if ($this->vehiculo_model->procesoActu($id_veh, $data)) {
+        if ($this->Vehiculo_model->procesoActu($id_veh, $data)) {
             $this->session->set_flashdata("actualizar", "Registro Actualizado correctamente.");
         } else {
             $this->session->set_flashdata("eliminar", "algo salio mal intente otra ves.");
             echo "no se pudo actualizar";
         }
-        redirect("vehiculos_controller/index");
+        redirect("Vehiculos_controller/index");
     }
 }

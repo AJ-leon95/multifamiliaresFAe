@@ -1,17 +1,21 @@
 <?php
-class empresas_controller extends CI_Controller
+class Empresas_controller extends CI_Controller
 {
 
     public function __construct()
     {
-        parent::__construct();
-        $this->load->model("empresa_model");
-        // $this->load->model("empresa_model");
+        parent::__construct();  
+        $this->load->library('session');
+        if (!$this->session->userdata('conectado')) {
+            redirect('/Vista_general/login'); 
+        }
+        $this->load->model("Empresa_model");
+        // $this->load->model("Empresa_model");
     }
     public function index()
     {
-        
-        $data["emp"] = $this->empresa_model->obtenerDatos();
+       
+        $data["emp"] = $this->Empresa_model->obtenerDatos();
         $this->load->view("administracion/header");
             $this->load->view("empresa/index", $data);
             $this->load->view("administracion/footer");
@@ -25,7 +29,7 @@ class empresas_controller extends CI_Controller
             $this->session->userdata("conectado")->perfil == "SECRETARIO" ||
             $this->session->userdata("conectado")->perfil == "GERENTE"
         ) { 
-        $data["emp"] = $this->empresa_model->obtenerEmpresa($id_emp);
+        $data["emp"] = $this->Empresa_model->obtenerEmpresa($id_emp);
         $this->load->view("administracion/header");
             $this->load->view("empresa/editar", $data);
             $this->load->view("administracion/footer");
@@ -46,7 +50,7 @@ class empresas_controller extends CI_Controller
             // "logo_emp" => $this->input->post("logo_emp"),
         );
         $id_emp = $this->input->post("id_emp");
-        $empresa = $this->empresa_model->obtenerEmpresa($id_emp);
+        $empresa = $this->Empresa_model->obtenerEmpresa($id_emp);
         //foto
         $this->load->library("upload");
         $new_name = "new_logo" . time() . "_" . rand(1, 5000);
@@ -69,9 +73,9 @@ class empresas_controller extends CI_Controller
             }
         }
 
-        if ($this->empresa_model->actualizar($id_emp, $nuevosDatosEmp)) {
+        if ($this->Empresa_model->actualizar($id_emp, $nuevosDatosEmp)) {
             $this->session->set_flashdata("actualizar", "Registro Actualizado correctamente.");
-            redirect("/empresas_controller/index");
+            redirect("/Empresas_controller/index");
         } else {
             echo "error al actualizar";
             $this->session->set_flashdata("eliminar", "error algo salio mal al actualizar.");

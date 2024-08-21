@@ -15,7 +15,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <?php if ($empresa) { ?>
-                    <form action="<?php echo site_url("/notificaciones_controller/guardarNotificacion") ?>" method="post" enctype="multipart/form-data" id="frm">
+                    <form action="<?php echo site_url("/Notificaciones_controller/guardarNotificacion") ?>" method="post" enctype="multipart/form-data" id="frm">
                       
                         <div class="row">
                             <div class="col-4">
